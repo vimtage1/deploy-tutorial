@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # env:
+    #     VITE_PAGE_TITLE: ${{ secrets.VITE_PAGE_TITLE_REPO_SECRET }}
     strategy:
       matrix:
         node-version: [18.x]
@@ -21,6 +23,10 @@ jobs:
         with:
           node-version: '18.x'
       - run: npm install
+      - name: Make .env
+        run: |
+          touch .env
+          echo "API_KEY=${{ secrets.ENV }}" >> .env
       - run: npm run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
