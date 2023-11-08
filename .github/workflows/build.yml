@@ -1,33 +1,44 @@
-name: Node.js CI
+name: Build and Deploy React App
+
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-env:
-  VITE_PAGE_TITLE: ${{ secrets.VITE_PAGE_TITLE}}
-  VITE_API_KEY: ${{secrets.VITE_API_KEY}}
-  VITE_FIREBASE_KEY: ${{secrets.VITE_FIREBASE_KEY}}
+    branches:
+      - master 
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
-      - run: npm install
+          node-version: 18.x  # Adjust the Node.js version as needed
+
+      - name: Install Dependencies
+        env:
+          VITE_PAGE_TITLE: ${{ secrets.VITE_PAGE_TITLE}}
+          VITE_API_KEY: ${{secrets.VITE_API_KEY}}
+          VITE_FIREBASE_KEY: ${{secrets.VITE_FIREBASE_KEY}}
+        run: npm install
+
       - name: Build
         run: npm run build
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+
