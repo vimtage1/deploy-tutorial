@@ -12,8 +12,6 @@ function App() {
 
       <h2>FIREBASE KEY</h2>
       <p>{import.meta.env.VITE_FIREBASE_KEY}</p>
-
-      <div>footer links</div>
     </>
   )
 }
