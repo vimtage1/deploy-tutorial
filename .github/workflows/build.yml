@@ -4,26 +4,27 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+
+env:
+  VITE_PAGE_TITLE: ${{ secrets.VITE_PAGE_TITLE}}
+  VITE_API_KEY: ${{secrets.VITE_API_KEY}}
+  VITE_FIREBASE_KEY: ${{secrets.VITE_FIREBASE_KEY}}
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    # env:
-    #     VITE_PAGE_TITLE: ${{ secrets.VITE_PAGE_TITLE_REPO_SECRET }}
     strategy:
       matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
       - run: npm install
-      - name: Make .env
-        run: |
-          touch .env
-          echo "API_KEY=${{ secrets.ENV }}" >> .env
-      - run: npm run build
+      - name: Build
+        run: npm run build
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
