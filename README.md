@@ -1,27 +1,52 @@
-# React + TypeScript + Vite
+# Two Content Tabs Example
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<style>
+  .tabs {
+    display: flex;
+    cursor: pointer;
+  }
 
-Currently, two official plugins are available:
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    background-color: #f0f0f0;
+  }
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  .content {
+    display: none;
+  }
 
-## Expanding the ESLint configuration
+  .content.active {
+    display: block;
+  }
+</style>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+<div class="tabs">
+  <div class="tab" onclick="showContent(1)">Tab 1</div>
+  <div class="tab" onclick="showContent(2)">Tab 2</div>
+</div>
 
-- Configure the top-level `parserOptions` property like this:
+<div id="content1" class="content active">
+  ## Content for Tab 1
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+  This is the content for the first tab.
+</div>
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+<div id="content2" class="content">
+  ## Content for Tab 2
+
+  This is the content for the second tab.
+</div>
+
+<script>
+  function showContent(tabIndex) {
+    // Hide all content
+    document.querySelectorAll('.content').forEach((content) => {
+      content.classList.remove('active');
+    });
+
+    // Show the selected tab content
+    document.getElementById(`content${tabIndex}`).classList.add('active');
+  }
+</script>
